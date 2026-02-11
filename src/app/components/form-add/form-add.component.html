@@ -1,4 +1,66 @@
-<div class="w-[100%] rounded-lg border border-gray-800 bg-gray-900/40 px-6 py-4 text-center">
-    <p>form-add works!</p>
-</div>
+<div class="w-full max-w-md mx-auto rounded-2xl border border-gray-800 bg-gray-900/60 p-6 shadow-lg">
+  
+  @if (typeForm() === null) {
+    <div class="flex flex-col items-center justify-center gap-2 text-gray-400">
+      <p class="text-sm text-center">
+        Clique em 
+        <span class="text-green-400 font-medium"> Adicionar Receita </span> 
+        ou 
+        <span class="text-red-400 font-medium"> Adicionar Despesa </span> 
+        para abrir o formulário.
+      </p>
+    </div>
+  }
+  @else {
+    <div class="flex flex-col gap-6">
+      
+      <h2 class="text-lg font-semibold text-white text-center">
+        Novo {{ typeForm() }}
+      </h2>
 
+      <div class="flex flex-col gap-5">
+
+        <!-- Nome -->
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium text-gray-300">
+            Nome
+          </label>
+          <input 
+            type="text"
+            placeholder="Ex: Aluguel, Salário, Mercado..."
+            class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white placeholder-gray-500 
+                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          />
+        </div>
+
+        <!-- Valor -->
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium text-gray-300">
+            Valor
+          </label>
+          <input 
+            type="number"
+            placeholder="R$ 0,00"
+            class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white placeholder-gray-500 
+                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          />
+        </div>
+
+        <!-- Botão -->
+        <div class="flex justify-center pt-2">
+          <button
+            type="submit"
+            class="w-full rounded-xl bg-blue-600 hover:bg-blue-700 px-6 py-2 font-medium text-white 
+                   transition active:scale-95"
+            (click)="onClose()"
+          >
+            Adicionar
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  }
+
+</div>

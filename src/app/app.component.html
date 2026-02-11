@@ -30,13 +30,13 @@
 
       <div class="flex justify-center">
         @if (modal.activeForm() === 'income') {
-          <app-form-add />
+          <app-form-add [typeForm]="'income'" />
         }
         @if (modal.activeForm() === 'expense') {
-          <app-form-add />
+          <app-form-add [typeForm]="'expense'" />
         }
         @if (modal.activeForm() === null) {
-          
+          <app-form-add [typeForm]="null" />
         }
       </div>
 
