@@ -4,14 +4,14 @@
   <div class="flex flex-1 flex-col items-center px-6 py-10">
     <div class="w-full max-w-7xl space-y-10">
 
-      <header class="text-center">
+      <section class="text-center">
         <h1 class="text-2xl font-semibold tracking-tight">
-          Hello, {{ title }}
+          {{ title }}
         </h1>
         <p class="mt-2 text-sm text-gray-400">
           Visão geral das suas finanças
         </p>
-      </header>
+      </section>
 
       <section class="flex justify-center">
         <div
@@ -28,17 +28,26 @@
         </div>
       </section>
 
-      <section class="rounded-xl border border-gray-800 bg-gray-900/30 p-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div class="flex justify-center">
+        @if (modal.activeForm() === 'income') {
+          <app-form-add />
+        }
+        @if (modal.activeForm() === 'expense') {
+          <app-form-add />
+        }
+        @if (modal.activeForm() === null) {
+          
+        }
+      </div>
 
-          <div class="md:pr-10 md:border-r md:border-gray-700">
-            <app-income />
-          </div>
 
-          <div class="md:pl-10">
-            <app-expenses />
-          </div>
+      <section class="flex justify-center gap-4">
+        <div class="w-[30%] bg-gray-800/30 p-4 rounded-lg border border-gray-800">
+          <app-income />
+        </div>
 
+        <div class="w-[30%] bg-gray-800/30 p-4 rounded-lg border border-gray-800">
+          <app-expenses />
         </div>
       </section>
 

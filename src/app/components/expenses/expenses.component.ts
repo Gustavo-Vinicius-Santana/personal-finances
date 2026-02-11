@@ -1,9 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { FinanceService } from '../../services/finance.service';
+import { ButtonAddComponent } from '../button-add/button-add.component';
+import { FormModalService } from '../../services/form-modal.service';
 
 @Component({
   selector: 'app-expenses',
-  imports: [],
+  imports: [ButtonAddComponent],
   templateUrl: './expenses.component.html',
   styleUrl: './expenses.component.scss'
 })

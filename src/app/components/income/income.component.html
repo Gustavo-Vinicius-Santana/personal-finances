@@ -1,4 +1,10 @@
-<h2 class="text-xl font-semibold mb-4">Lucros</h2>
+<div class="flex justify-between items-center">
+    <h2 class="text-xl font-semibold mb-4">Lucros</h2>
+    <app-button-add 
+        label="Receita"
+        typeFormAdd="income"
+    />
+</div>
 
 @for (income of finance.incomes(); track income.id) {
     <div class="flex justify-between py-2 border-b border-gray-700">
