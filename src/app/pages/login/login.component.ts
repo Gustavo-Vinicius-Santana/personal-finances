@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -9,8 +10,10 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class LoginComponent {
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   login() {
+    this.authService.login('dummy-token');
     this.router.navigate(['home']);
   }
 
