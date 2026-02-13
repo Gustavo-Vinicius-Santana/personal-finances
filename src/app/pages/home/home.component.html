@@ -1,0 +1,52 @@
+<div class="flex flex-1 flex-col items-center px-6 py-10">
+    <div class="w-full max-w-7xl space-y-10">
+
+        <section class="text-center">
+        <h1 class="text-2xl font-semibold tracking-tight">
+            {{ title }}
+        </h1>
+        <p class="mt-2 text-sm text-gray-400">
+            Visão geral das suas finanças
+        </p>
+        </section>
+
+        <section class="flex justify-center">
+        <div
+            class="rounded-lg border border-gray-800 bg-gray-900/40 px-6 py-4 text-center"
+        >
+            <p class="text-sm text-gray-400">Saldo atual</p>
+            <p
+            class="mt-1 text-2xl font-bold"
+            [class.text-green-400]="finance.balance() >= 0"
+            [class.text-red-400]="finance.balance() < 0"
+            >
+            {{ finance.balance() }}
+            </p>
+        </div>
+        </section>
+
+        <div class="flex justify-center">
+        @if (modal.activeForm() === 'income') {
+            <app-form-add [typeForm]="'income'" />
+        }
+        @if (modal.activeForm() === 'expense') {
+            <app-form-add [typeForm]="'expense'" />
+        }
+        @if (modal.activeForm() === null) {
+            <app-form-add [typeForm]="null" />
+        }
+        </div>
+
+
+        <section class="flex justify-center gap-4">
+        <div class="w-[30%] bg-gray-800/30 p-4 rounded-lg border border-gray-800">
+            <app-income />
+        </div>
+
+        <div class="w-[30%] bg-gray-800/30 p-4 rounded-lg border border-gray-800">
+            <app-expenses />
+        </div>
+        </section>
+
+    </div>
+</div>

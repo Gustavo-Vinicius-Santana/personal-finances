@@ -9,14 +9,9 @@ import { FormAddComponent } from './components/form-add/form-add.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, ExpensesComponent, IncomeComponent, FormAddComponent],
+  imports: [RouterOutlet, HeaderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  finance = inject(FinanceService);
-
-  title = 'personal-finances';
-
-  modal = inject(FormModalService);
 }
