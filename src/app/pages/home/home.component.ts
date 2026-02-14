@@ -1,15 +1,18 @@
 import { Component, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '../../components/header/header.component';
 import { ExpensesComponent } from '../../components/expenses/expenses.component';
 import { IncomeComponent } from '../../components/income/income.component';
 import { FormAddComponent } from '../../components/form-add/form-add.component';
 import { FinanceService } from '../../services/finance.service';
 import { FormModalService } from '../../services/form-modal.service';
+import { CurrencyPipe, registerLocaleData  } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+
+registerLocaleData(localePt);
 
 @Component({
   selector: 'app-home',
-  imports: [RouterOutlet, HeaderComponent, ExpensesComponent, IncomeComponent, FormAddComponent],
+  imports: [HeaderComponent, ExpensesComponent, IncomeComponent, FormAddComponent, CurrencyPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

@@ -10,9 +10,9 @@
     <div class="flex justify-between py-2 border-b border-gray-700">
         <span>{{ expense.description }}</span>
         <span class="text-red-400">
-            - {{ expense.amount }}
+            - {{ expense.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
         </span>
     </div>
 }
 
-<h3 class="text-right">Total: {{ finance.totalExpense() }}</h3>
+<h3 class="text-right">Total: {{ finance.totalExpense() | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</h3>

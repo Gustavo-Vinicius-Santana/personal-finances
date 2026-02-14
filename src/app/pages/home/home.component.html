@@ -20,7 +20,7 @@
             [class.text-green-400]="finance.balance() >= 0"
             [class.text-red-400]="finance.balance() < 0"
             >
-            {{ finance.balance() }}
+            {{ finance.balance() | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
             </p>
         </div>
         </section>
