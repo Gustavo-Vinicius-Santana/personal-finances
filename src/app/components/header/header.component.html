@@ -1,21 +1,42 @@
 <header class="w-full bg-gray-900 text-gray-100 shadow-md">
   <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+    
     <h1 class="text-xl font-bold tracking-wide">
       Personal Finances
     </h1>
 
-    @switch (isLogado) {
-      @case (true) {
-        <span class="text-sm text-gray-300">
-          Bem-vindo, <strong class="text-white">{{ usuario }}</strong>
-        </span>
+    <div class="flex items-center gap-3">
+
+      @if (isLoggedIn()) {
+
+        <button 
+          (click)="goToProfile()"
+          class="rounded bg-blue-600 px-4 py-2 text-sm font-medium hover:bg-blue-700 transition">
+          Perfil
+        </button>
+
+        <button 
+          (click)="logout()"
+          class="rounded bg-gray-700 px-4 py-2 text-sm font-medium hover:bg-gray-600 transition">
+          Logout
+        </button>
+
+      } @else {
+
+        <button 
+          (click)="goToLogin()"
+          class="rounded bg-blue-600 px-4 py-2 text-sm font-medium hover:bg-blue-700 transition">
+          Login
+        </button>
+
+        <button 
+          (click)="goToRegister()"
+          class="rounded bg-gray-700 px-4 py-2 text-sm font-medium hover:bg-gray-600 transition">
+          Register
+        </button>
+
       }
 
-      @default {
-        <span class="text-sm text-gray-400">
-          Não autenticado
-        </span>
-      }
-    }
+    </div>
   </div>
 </header>

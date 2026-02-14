@@ -1,0 +1,94 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-950 px-4">
+
+  <div class="w-full max-w-md mx-auto rounded-2xl border border-gray-800 bg-gray-900/60 p-8 shadow-lg">
+    
+    <form class="flex flex-col gap-6">
+
+      <!-- Título -->
+      <div class="text-center">
+        <h2 class="text-2xl font-semibold text-white">
+          Criar Conta
+        </h2>
+        <p class="text-sm text-gray-400 mt-1">
+          Preencha os dados para se cadastrar
+        </p>
+      </div>
+
+      <!-- Nome -->
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-gray-300">
+          Nome
+        </label>
+        <input
+          type="text"
+          placeholder="Seu nome completo"
+          class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white 
+                 placeholder-gray-500 focus:outline-none focus:ring-2 
+                 focus:ring-blue-500 focus:border-transparent transition"
+        />
+      </div>
+
+      <!-- Email -->
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-gray-300">
+          Email
+        </label>
+        <input
+          type="email"
+          placeholder="seu@email.com"
+          class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white 
+                 placeholder-gray-500 focus:outline-none focus:ring-2 
+                 focus:ring-blue-500 focus:border-transparent transition"
+        />
+      </div>
+
+      <!-- Senha -->
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-gray-300">
+          Senha
+        </label>
+        <input
+          type="password"
+          placeholder="********"
+          class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white 
+                 placeholder-gray-500 focus:outline-none focus:ring-2 
+                 focus:ring-blue-500 focus:border-transparent transition"
+        />
+      </div>
+
+      <!-- Confirmar Senha -->
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-gray-300">
+          Confirmar Senha
+        </label>
+        <input
+          type="password"
+          placeholder="********"
+          class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white 
+                 placeholder-gray-500 focus:outline-none focus:ring-2 
+                 focus:ring-blue-500 focus:border-transparent transition"
+        />
+      </div>
+
+      <!-- Botão -->
+      <button
+        type="submit"
+        class="w-full rounded-xl bg-blue-600 hover:bg-blue-700 px-6 py-2 font-medium text-white 
+               transition active:scale-95"
+      >
+        Criar Conta
+      </button>
+
+      <!-- Link para Login -->
+      <p class="text-sm text-center text-gray-400">
+        Já possui conta?
+        <a [routerLink]="['']"  class="text-blue-400 hover:text-blue-500 transition font-medium">
+          Entrar
+        </a>
+      </p>
+
+    </form>
+
+  </div>
+
+</div>

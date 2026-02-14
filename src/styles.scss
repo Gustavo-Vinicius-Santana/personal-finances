@@ -1,2 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
 @use 'tailwindcss';
+
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.app-dialog-theme .mdc-dialog__surface {
+  background-color: #111827; // bg-gray-900
+  color: #f3f4f6; // text-gray-100
+  border-radius: 16px;
+  border: 1px solid #1f2937; // border-gray-800
+  --mdc-dialog-subhead-color: #f9fafb;
+}

@@ -1,0 +1,92 @@
+<div class="w-full flex flex-col gap-6">
+
+  <h2 class="text-lg font-semibold text-white text-center">
+    {{ labelForm() }}
+  </h2>
+
+  <div class="flex flex-col gap-5">
+
+    <div class="md:flex flex-row gap-4 justify-center">
+      <!-- Nome -->
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-gray-300">
+          Nome
+        </label>
+
+        <input 
+          (focus)="submitted = false"
+          [formControl]="name"
+          type="text"
+          placeholder="Ex: Aluguel, Salário, Mercado..."
+          class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white
+                placeholder-gray-500 focus:outline-none focus:ring-2
+                focus:ring-blue-500 focus:border-transparent transition"
+        />
+
+        @if (name.invalid && submitted) {
+          <span class="text-red-400 text-xs">
+            @if (name.errors?.['required']) {
+              Nome é obrigatório.
+            }
+            @if (name.errors?.['minlength']) {
+              Mínimo de 3 caracteres.
+            }
+          </span>
+        }
+      </div>
+
+      <!-- Valor -->
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-gray-300">
+          Valor
+        </label>
+
+        <input 
+          type="text"
+          [value]="formattedMoney"
+          (input)="onMoneyInput($event)"
+          (focus)="submitted = false"
+          placeholder="R$ 0,00"
+          class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white
+                placeholder-gray-500 focus:outline-none focus:ring-2
+                focus:ring-blue-500 focus:border-transparent transition"
+        />
+
+        @if (money.invalid && submitted) {
+          <span class="text-red-400 text-xs">
+            @if (money.errors?.['required']) {
+              Valor é obrigatório.
+            }
+            @if (money.errors?.['min']) {
+              Valor deve ser maior que 0.
+            }
+          </span>
+        }
+      </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="flex flex-col gap-3 pt-2">
+
+      <button
+        type="submit"
+        class="w-full rounded-xl bg-blue-600 hover:bg-blue-700 px-6 py-2 font-medium text-white
+               transition active:scale-95"
+        (click)="onSubmit()"
+      >
+        Adicionar
+      </button>
+
+      <button
+        type="button"
+        class="w-full rounded-xl bg-gray-700 hover:bg-gray-600 px-6 py-2 font-medium text-white
+               transition active:scale-95"
+        (click)="modal.close()"
+      >
+        Cancelar
+      </button>
+
+    </div>
+
+  </div>
+</div>

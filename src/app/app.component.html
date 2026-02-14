@@ -1,47 +1,4 @@
 <main class="min-h-screen bg-gray-950 text-gray-100 flex flex-col">
   <app-header></app-header>
-
-  <div class="flex flex-1 flex-col items-center px-6 py-10">
-    <div class="w-full max-w-7xl space-y-10">
-
-      <header class="text-center">
-        <h1 class="text-2xl font-semibold tracking-tight">
-          Hello, {{ title }}
-        </h1>
-        <p class="mt-2 text-sm text-gray-400">
-          Visão geral das suas finanças
-        </p>
-      </header>
-
-      <section class="flex justify-center">
-        <div
-          class="rounded-lg border border-gray-800 bg-gray-900/40 px-6 py-4 text-center"
-        >
-          <p class="text-sm text-gray-400">Saldo atual</p>
-          <p
-            class="mt-1 text-2xl font-bold"
-            [class.text-green-400]="finance.balance() >= 0"
-            [class.text-red-400]="finance.balance() < 0"
-          >
-            {{ finance.balance() }}
-          </p>
-        </div>
-      </section>
-
-      <section class="rounded-xl border border-gray-800 bg-gray-900/30 p-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-
-          <div class="md:pr-10 md:border-r md:border-gray-700">
-            <app-income />
-          </div>
-
-          <div class="md:pl-10">
-            <app-expenses />
-          </div>
-
-        </div>
-      </section>
-
-    </div>
-  </div>
+  <router-outlet></router-outlet>
 </main>
