@@ -31,11 +31,11 @@
         <section class="grid grid-cols-1 gap-6 md:grid-cols-2 w-full max-w-4xl mx-auto">
         
             <div class="bg-gray-800/30 p-4 rounded-lg border border-gray-800">
-                <app-income />
+                <app-financial-movement [movement]="'income'" />
             </div>
 
             <div class="bg-gray-800/30 p-4 rounded-lg border border-gray-800">
-                <app-expenses />
+                <app-financial-movement [movement]="'expense'" />
             </div>
 
         </section>
