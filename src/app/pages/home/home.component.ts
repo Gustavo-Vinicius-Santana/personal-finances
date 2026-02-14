@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { HeaderComponent } from '../../components/header/header.component';
 import { ExpensesComponent } from '../../components/expenses/expenses.component';
 import { IncomeComponent } from '../../components/income/income.component';
 import { FormAddComponent } from '../../components/form-add/form-add.component';
@@ -12,7 +11,7 @@ registerLocaleData(localePt);
 
 @Component({
   selector: 'app-home',
-  imports: [HeaderComponent, ExpensesComponent, IncomeComponent, FormAddComponent, CurrencyPipe],
+  imports: [ ExpensesComponent, IncomeComponent, FormAddComponent, CurrencyPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

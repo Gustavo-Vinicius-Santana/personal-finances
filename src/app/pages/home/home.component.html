@@ -1,28 +1,18 @@
 <div class="flex flex-1 flex-col items-center px-6 py-10">
     <div class="w-full max-w-7xl space-y-10">
-
-        <section class="text-center">
-        <h1 class="text-2xl font-semibold tracking-tight">
-            {{ title }}
-        </h1>
-        <p class="mt-2 text-sm text-gray-400">
-            Visão geral das suas finanças
-        </p>
-        </section>
-
         <section class="flex justify-center">
-        <div
-            class="rounded-lg border border-gray-800 bg-gray-900/40 px-6 py-4 text-center"
-        >
-            <p class="text-sm text-gray-400">Saldo atual</p>
-            <p
-            class="mt-1 text-2xl font-bold"
-            [class.text-green-400]="finance.balance() >= 0"
-            [class.text-red-400]="finance.balance() < 0"
+            <div
+                class="rounded-lg border border-gray-800 bg-gray-900/40 px-6 py-4 text-center"
             >
-            {{ finance.balance() | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
-            </p>
-        </div>
+                <p class="text-sm text-gray-400">Saldo atual</p>
+                <p
+                class="mt-1 text-2xl font-bold"
+                [class.text-green-400]="finance.balance() >= 0"
+                [class.text-red-400]="finance.balance() < 0"
+                >
+                {{ finance.balance() | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+                </p>
+            </div>
         </section>
 
         <div class="flex justify-center">
@@ -38,14 +28,16 @@
         </div>
 
 
-        <section class="flex justify-center gap-4">
-        <div class="w-[30%] bg-gray-800/30 p-4 rounded-lg border border-gray-800">
-            <app-income />
-        </div>
+        <section class="grid grid-cols-1 gap-6 md:grid-cols-2 w-full max-w-4xl mx-auto">
+        
+            <div class="bg-gray-800/30 p-4 rounded-lg border border-gray-800">
+                <app-income />
+            </div>
 
-        <div class="w-[30%] bg-gray-800/30 p-4 rounded-lg border border-gray-800">
-            <app-expenses />
-        </div>
+            <div class="bg-gray-800/30 p-4 rounded-lg border border-gray-800">
+                <app-expenses />
+            </div>
+
         </section>
 
     </div>
