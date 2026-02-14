@@ -15,19 +15,6 @@
             </div>
         </section>
 
-        <div class="flex justify-center">
-        @if (modal.activeForm() === 'income') {
-            <app-form-add [typeForm]="'income'" />
-        }
-        @if (modal.activeForm() === 'expense') {
-            <app-form-add [typeForm]="'expense'" />
-        }
-        @if (modal.activeForm() === null) {
-            <app-form-add [typeForm]="null" />
-        }
-        </div>
-
-
         <section class="grid grid-cols-1 gap-6 md:grid-cols-2 w-full max-w-4xl mx-auto">
         
             <div class="bg-gray-800/30 p-4 rounded-lg border border-gray-800">

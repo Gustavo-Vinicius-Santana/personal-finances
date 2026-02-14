@@ -1,20 +1,32 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ModalComponent } from '../components/modal/modal.component';
 
-export type FormType = 'income' | 'expense' | null;
+export type FormType = 'income' | 'expense';
 
 @Injectable({ providedIn: 'root' })
 export class FormModalService {
-  activeForm = signal<FormType>(null);
+
+  private dialog = inject(MatDialog);
+  private dialogRef?: MatDialogRef<ModalComponent>;
 
   open(form: FormType) {
-    this.activeForm.set(form);
+    this.dialogRef = this.dialog.open(ModalComponent, {
+      width: '500px',
+      disableClose: false,
+      data: form,
+      panelClass: 'app-dialog-theme'
+    });
+
+    return this.dialogRef.afterClosed();
   }
 
   close() {
-    this.activeForm.set(null);
+    this.dialogRef?.close();
   }
 
   switch(form: FormType) {
-    this.activeForm.set(form);
+    this.dialogRef?.close();
+    this.open(form);
   }
 }

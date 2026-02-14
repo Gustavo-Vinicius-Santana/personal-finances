@@ -10,7 +10,7 @@ registerLocaleData(localePt);
 
 @Component({
   selector: 'app-home',
-  imports: [ FormAddComponent, FinancialMovementComponent, CurrencyPipe],
+  imports: [ FinancialMovementComponent, CurrencyPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
