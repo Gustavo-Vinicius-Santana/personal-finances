@@ -1,49 +1,124 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-950 px-4">
 
   <div class="w-full max-w-md mx-auto rounded-2xl border border-gray-800 bg-gray-900/60 p-8 shadow-lg">
-    
-    <form class="flex flex-col gap-6">
 
-      <!-- Título -->
+    <form (ngSubmit)="step === 'email' ? sendEmail() : changePassword()" class="flex flex-col gap-6">
+
       <div class="text-center">
         <h2 class="text-2xl font-semibold text-white">
           Recuperar Conta
         </h2>
-        <p class="text-sm text-gray-400 mt-1">
-          Informe seu email para receber as instruções
-        </p>
+
+        @if (step === 'email') {
+          <p class="text-sm text-gray-400 mt-1">
+            Informe seu email para receber as instruções
+          </p>
+        }
+
+        @if (step === 'reset') {
+          <p class="text-sm text-gray-400 mt-1">
+            Digite o código recebido e sua nova senha
+          </p>
+        }
       </div>
 
-      <!-- Email -->
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-gray-300">
-          Email
-        </label>
-        <input
-          type="email"
-          placeholder="seu@email.com"
-          class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white 
-                 placeholder-gray-500 focus:outline-none focus:ring-2 
-                 focus:ring-blue-500 focus:border-transparent transition"
-        />
-      </div>
+      @if (step === 'email') {
 
-      <!-- Botão Enviar -->
-      <button
-        type="submit"
-        class="w-full rounded-xl bg-blue-600 hover:bg-blue-700 px-6 py-2 font-medium text-white 
-               transition active:scale-95"
-      >
-        Enviar Instruções
-      </button>
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium text-gray-300">Email</label>
 
-      <!-- Botão Voltar -->
+          <input
+            type="email"
+            [formControl]="email"
+            placeholder="seu@email.com"
+            class="rounded-xl bg-gray-800 px-4 py-2 text-white placeholder-gray-500
+                   focus:outline-none focus:ring-2 transition"
+            [ngClass]="{
+              'border border-red-500 focus:ring-red-500': email.touched && email.invalid,
+              'border border-gray-700 focus:ring-blue-500': !(email.touched && email.invalid)
+            }"
+          />
+
+          @if (email.touched && email.invalid) {
+            <small class="text-red-500 text-xs font-medium">
+              Email inválido
+            </small>
+          }
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="loading"
+          class="w-full rounded-xl bg-blue-600 hover:bg-blue-700 px-6 py-2 font-medium text-white
+                 transition active:scale-95 disabled:opacity-50">
+          @if (!loading) { Enviar código }
+          @if (loading) { Enviando... }
+        </button>
+
+      }
+
+      @if (step === 'reset') {
+
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium text-gray-300">Código</label>
+
+          <input
+            type="text"
+            [formControl]="code"
+            placeholder="Digite o código"
+            class="rounded-xl bg-gray-800 px-4 py-2 text-white
+                   focus:outline-none focus:ring-2 transition"
+            [ngClass]="{
+              'border border-red-500 focus:ring-red-500': code.touched && code.invalid,
+              'border border-gray-700 focus:ring-blue-500': !(code.touched && code.invalid)
+            }"
+          />
+
+          @if (code.touched && code.invalid) {
+            <small class="text-red-500 text-xs font-medium">
+              Código inválido (mínimo 6 caracteres)
+            </small>
+          }
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium text-gray-300">Nova senha</label>
+
+          <input
+            type="password"
+            [formControl]="newPassword"
+            placeholder="Nova senha"
+            class="rounded-xl bg-gray-800 px-4 py-2 text-white
+                   focus:outline-none focus:ring-2 transition"
+            [ngClass]="{
+              'border border-red-500 focus:ring-red-500': newPassword.touched && newPassword.invalid,
+              'border border-gray-700 focus:ring-blue-500': !(newPassword.touched && newPassword.invalid)
+            }"
+          />
+
+          @if (newPassword.touched && newPassword.invalid) {
+            <small class="text-red-500 text-xs font-medium">
+              Mínimo 6 caracteres
+            </small>
+          }
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="loading"
+          class="w-full rounded-xl bg-green-600 hover:bg-green-700 px-6 py-2 font-medium text-white
+                 transition active:scale-95 disabled:opacity-50">
+          @if (!loading) { Alterar senha }
+          @if (loading) { Alterando... }
+        </button>
+
+      }
+
       <button
         type="button"
         (click)="goToLogin()"
-        class="w-full rounded-xl border border-gray-700 bg-gray-800 hover:bg-gray-700 
-               px-6 py-2 font-medium text-gray-300 hover:text-white transition active:scale-95"
-      >
+        class="w-full rounded-xl border border-gray-700 bg-gray-800 hover:bg-gray-700
+               px-6 py-2 font-medium text-gray-300 hover:text-white transition active:scale-95">
         Voltar
       </button>
 
