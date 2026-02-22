@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Injector, Input, Type } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { FormAddComponent } from "../form-add/form-add.component";
+import { CommonModule } from '@angular/common';
 
 export type FormType = 'income' | 'expense';
 
@@ -9,12 +9,19 @@ export type FormType = 'income' | 'expense';
   standalone: true,
   imports: [
     MatDialogModule,
-    FormAddComponent
+    CommonModule
 ],
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.scss'
 })
 export class ModalComponent {
-  formType = inject(MAT_DIALOG_DATA) as FormType;
+  @Input() component!: Type<any>;
+
+  data = inject(MAT_DIALOG_DATA);
+
+  injector = Injector.create({
+    providers: [{ provide: MAT_DIALOG_DATA, useValue: this.data }],
+    parent: inject(Injector)
+  });
 
 }

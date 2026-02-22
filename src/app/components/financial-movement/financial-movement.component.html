@@ -12,7 +12,11 @@
     @case ('income') {
         @for (income of items; track income.id) {
             <div class="flex justify-between py-2 border-b border-gray-700">
-                <span>{{ income.description }}</span>
+                <span 
+                class="cursor-pointer hover:underline" 
+                (click)="openEditModal(income)">
+                    {{ income.description }}
+                </span>
                 <span class="text-green-400">
                     + {{ income.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
                 </span>
@@ -26,7 +30,11 @@
     @case ('expense') {
         @for (expense of items; track expense.id) {
             <div class="flex justify-between py-2 border-b border-gray-700">
-                <span>{{ expense.description }}</span>
+                <span 
+                class="cursor-pointer hover:underline" 
+                (click)="openEditModal(expense)">
+                    {{ expense.description }}
+                </span>
                 <span class="text-red-400">
                     - {{ expense.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
                 </span>

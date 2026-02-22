@@ -42,7 +42,15 @@ export class FinanceService {
     return this.http.put<FinanceItemResponse>(
       `${this.apiUrl}/finance-movement/${id}`,
       data
-    );
+    ).pipe(
+      tap((updatedItem: FinanceItemResponse) => {
+        if(updatedItem.type === 'INCOME') {
+          this.incomeSubject.next(this.incomeSubject.value.map(item => item.id === id ? updatedItem : item));
+        }
+        if(updatedItem.type === 'EXPENSE') {
+          this.expenseSubject.next(this.expenseSubject.value.map(item => item.id === id ? updatedItem : item));
+        }}
+    ));
   }
 
   getById(id: string) {

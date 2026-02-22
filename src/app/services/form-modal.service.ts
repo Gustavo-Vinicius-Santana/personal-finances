@@ -10,11 +10,11 @@ export class FormModalService {
   private dialog = inject(MatDialog);
   private dialogRef?: MatDialogRef<ModalComponent>;
 
-  open(form: FormType) {
-    this.dialogRef = this.dialog.open(ModalComponent, {
+  open<T>(component: any, data?: any) {
+    this.dialogRef = this.dialog.open(component, {
       width: '500px',
       disableClose: false,
-      data: form,
+      data,
       panelClass: 'app-dialog-theme'
     });
 

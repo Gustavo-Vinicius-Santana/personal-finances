@@ -1,5 +1,6 @@
 import { Component, input, inject, computed } from '@angular/core';
 import { FormModalService, FormType } from '../../services/form-modal.service';
+import { FormAddComponent } from '../form-add/form-add.component';
 
 @Component({
   selector: 'app-button-add',
@@ -14,6 +15,7 @@ export class ButtonAddComponent {
   modal = inject(FormModalService);
 
   onAdd() {
-    this.modal.open(this.typeFormAdd());
+    const component = FormAddComponent; 
+    this.modal.open(component, { typeForm: this.typeFormAdd() });
   }
 }

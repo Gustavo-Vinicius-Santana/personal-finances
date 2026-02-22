@@ -5,6 +5,8 @@ import { CurrencyPipe, registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { FinanceItemResponse } from '../../models/finance.model';
 import { Subscription } from 'rxjs';
+import { FormEditComponent } from '../form-edit/form-edit.component';
+import { FormModalService } from '../../services/form-modal.service';
 
 registerLocaleData(localePt);
 
@@ -18,6 +20,8 @@ type FinancialMovementType = 'income' | 'expense';
 })
 export class FinancialMovementComponent implements OnInit, OnDestroy {
   movement = input<FinancialMovementType>();
+
+  modal = inject(FormModalService);
 
   financeService = inject(FinanceService);
 
@@ -44,5 +48,15 @@ export class FinancialMovementComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription?.unsubscribe();
+  }
+
+  openEditModal(item: FinanceItemResponse) {
+    const component = FormEditComponent;
+    this.modal.open(component, {
+      id: item.id,
+      description: item.description,
+      amount: item.amount,
+      typeForm: this.movement() ?? 'income'
+    });
   }
 }

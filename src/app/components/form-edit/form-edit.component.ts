@@ -1,24 +1,30 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormModalService } from '../../services/form-modal.service';
 import { FinanceService } from '../../services/finance.service';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-form-add',
+  selector: 'app-form-edit',
   imports: [ReactiveFormsModule],
-  templateUrl: './form-add.component.html',
-  styleUrl: './form-add.component.scss'
+  templateUrl: './form-edit.component.html',
+  styleUrl: './form-edit.component.scss'
 })
-export class FormAddComponent {
-  private data = inject(MAT_DIALOG_DATA) as { typeForm: 'income' | 'expense' };
+export class FormEditComponent {
+  private data = inject(MAT_DIALOG_DATA) as 
+  { 
+    id: string, 
+    description: string, 
+    amount: number, 
+    typeForm: 'income' | 'expense' 
+  };
 
   typeForm = signal<string | null>(this.data?.typeForm ?? null);
 
   labelForm = computed(() =>
     this.typeForm() === 'income'
-      ? 'Adicionar Receita'
-      : 'Adicionar Despesa'
+      ? 'Editar Receita'
+      : 'Editar Despesa'
   );
 
   modal = inject(FormModalService);
@@ -59,6 +65,20 @@ export class FormAddComponent {
     input.value = this.formattedMoney;
   }
 
+  ngOnInit() {
+    console.log('Dados recebidos:', this.data);
+
+    this.name.setValue(this.data.description);
+
+    // 👇 ESSENCIAL
+    this.money.setValue(this.data.amount);
+
+    this.formattedMoney = this.data.amount.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
 
   onSubmit() {
     this.submitted = true;
@@ -67,7 +87,7 @@ export class FormAddComponent {
       return;
     }
 
-    this.finance.create({
+    this.finance.update(this.data.id, {
       description: this.name.value ,
       amount: this.money.value,
       type: this.typeForm()?.toUpperCase() as 'INCOME' | 'EXPENSE',
@@ -75,5 +95,22 @@ export class FormAddComponent {
     }).subscribe();
 
     this.modal.close();
+  }
+
+  onDelete() {
+    this.finance.remove(
+      { 
+        id: this.data.id,
+        description: this.data.description,
+        amount: this.data.amount,
+        type: this.typeForm()?.toUpperCase() as 'INCOME' | 'EXPENSE',
+        date: new Date()
+      }
+    ).subscribe({
+      next: () => {
+        this.modal.close();
+      },
+      error: console.error
+    });
   }
 }
