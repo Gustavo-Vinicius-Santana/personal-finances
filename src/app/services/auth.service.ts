@@ -22,13 +22,22 @@ export class AuthService {
   // TOKEN STORAGE
   // =====================
 
-  private saveTokens(response: AuthResponse) {
+  private saveTokens(response: AuthResponse, remember: boolean) {
     localStorage.setItem(this.tokenKey, response.token);
-    localStorage.setItem(this.refreshKey, response.refresh);
+
+    if (remember) {
+      localStorage.setItem(this.refreshKey, response.refresh);
+    } else {
+      localStorage.removeItem(this.refreshKey);
+    }
   }
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
+  }
+
+  setToken(token: string) {
+    localStorage.setItem(this.tokenKey, token);
   }
 
   getRefreshToken(): string | null {
@@ -48,17 +57,17 @@ export class AuthService {
   // AUTH REQUESTS
   // =====================
 
-  login(data: LoginRequest) {
+  login(data: LoginRequest, remember: boolean) {
     console.log('Login data:', data);
     return this.http
       .post<AuthResponse>(`${this.apiUrl}/login`, data)
-      .pipe(tap(response => this.saveTokens(response)));
+      .pipe(tap(response => this.saveTokens(response, remember)));
   }
 
   register(data: RegisterRequest) {
     return this.http
       .post<AuthResponse>(`${this.apiUrl}/register`, data)
-      .pipe(tap(response => this.saveTokens(response)));
+      .pipe(tap(response => this.saveTokens(response, false)));
   }
 
   getCurrentUser() {
@@ -84,6 +93,11 @@ export class AuthService {
   refreshToken() {
     return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, {
       refreshToken: this.getRefreshToken()
-    }).pipe(tap(response => this.saveTokens(response)));
+    }).pipe(
+      tap(response => {
+        const hasRefresh = !!this.getRefreshToken();
+        this.saveTokens(response, hasRefresh);
+      })
+    );
   }
 }

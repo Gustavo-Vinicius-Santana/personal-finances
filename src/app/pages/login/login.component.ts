@@ -22,6 +22,12 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
 
+  ngOnInit() {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['home']);
+    }
+  }
+
   email = new FormControl('', { 
     nonNullable: true,
     validators: [Validators.required]
@@ -30,6 +36,7 @@ export class LoginComponent {
     nonNullable: true,
     validators: [Validators.required]
   });
+  remember = new FormControl(false, { nonNullable: true });
 
   handleSubmitLogin() {
     if (this.email.invalid || this.password.invalid) {
@@ -48,7 +55,7 @@ export class LoginComponent {
     this.authService.login({
       email: this.email.value,
       password: this.password.value
-    }).subscribe({
+    }, this.remember.value).subscribe({
       next: () => {
         this.snackBar.open('Login bem-sucedido!', 'OK', { 
           duration: 3000,
