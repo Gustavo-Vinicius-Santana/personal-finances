@@ -14,6 +14,12 @@ html {
     typography: Roboto,
     density: 0,
   ));
+  @include mat.menu-overrides((
+    container-color: #0e1420, // bg-gray-900
+    container-shape: 12px,
+    item-label-text-color: #e5e7eb, // gray-200
+    item-hover-state-layer-color: #1f2937, // gray-800
+  ));
 }/* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
