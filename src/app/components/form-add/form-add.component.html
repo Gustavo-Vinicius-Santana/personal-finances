@@ -1,75 +1,109 @@
-<div class="w-full flex flex-col gap-6">
+<div class="w-full max-w-xl mx-auto flex flex-col gap-8">
 
-  <h2 class="text-lg font-semibold text-white text-center">
+  <h2 class="text-xl font-semibold text-white text-center tracking-wide">
     {{ labelForm() }}
   </h2>
 
-  <div class="flex flex-col gap-5">
+  <div class="flex flex-col gap-6">
 
-    <div class="md:flex flex-row gap-4 justify-center">
-      <!-- Nome -->
+    <!-- NOME -->
+    <div class="flex flex-col gap-2">
+      <label class="text-sm font-medium text-gray-400">
+        Nome
+      </label>
+
+      <input 
+        (focus)="submitted = false"
+        [formControl]="name"
+        type="text"
+        placeholder="Ex: Aluguel, Salário, Mercado..."
+        class="w-full rounded-2xl bg-gray-800/80 border border-gray-700 
+               px-4 py-3 text-white placeholder-gray-500
+               focus:outline-none focus:ring-2 focus:ring-blue-500 
+               focus:border-transparent transition-all duration-200"
+      />
+
+      @if (name.invalid && submitted) {
+        <span class="text-red-400 text-xs">
+          @if (name.errors?.['required']) { Nome é obrigatório. }
+          @if (name.errors?.['minlength']) { Mínimo de 3 caracteres. }
+        </span>
+      }
+    </div>
+
+    <!-- VALOR + DATA -->
+    <div class="grid grid-cols-2 gap-4">
+
+      <!-- VALOR -->
       <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-gray-300">
-          Nome
-        </label>
-
-        <input 
-          (focus)="submitted = false"
-          [formControl]="name"
-          type="text"
-          placeholder="Ex: Aluguel, Salário, Mercado..."
-          class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white
-                placeholder-gray-500 focus:outline-none focus:ring-2
-                focus:ring-blue-500 focus:border-transparent transition"
-        />
-
-        @if (name.invalid && submitted) {
-          <span class="text-red-400 text-xs">
-            @if (name.errors?.['required']) {
-              Nome é obrigatório.
-            }
-            @if (name.errors?.['minlength']) {
-              Mínimo de 3 caracteres.
-            }
-          </span>
-        }
-      </div>
-
-      <!-- Valor -->
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-gray-300">
+        <label class="text-sm font-medium text-gray-400">
           Valor
         </label>
 
-        <input 
-          type="text"
-          [value]="formattedMoney"
-          (input)="onMoneyInput($event)"
-          (focus)="submitted = false"
-          placeholder="R$ 0,00"
-          class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white
-                placeholder-gray-500 focus:outline-none focus:ring-2
-                focus:ring-blue-500 focus:border-transparent transition"
-        />
+        <div class="relative">
+
+          <span class="absolute left-8 top-1/2 -translate-y-1/2 text-gray-500">
+            R$
+          </span>
+
+          <input 
+            type="text"
+            [value]="formattedMoney"
+            (input)="onMoneyInput($event)"
+            (focus)="submitted = false"
+            class="w-full rounded-2xl bg-gray-800/80 border border-gray-700 
+                   pl-14 pr-4 py-3 text-white
+                   focus:outline-none focus:ring-2 focus:ring-blue-500
+                   focus:border-transparent transition-all duration-200"
+          />
+        </div>
 
         @if (money.invalid && submitted) {
           <span class="text-red-400 text-xs">
-            @if (money.errors?.['required']) {
-              Valor é obrigatório.
-            }
-            @if (money.errors?.['min']) {
-              Valor deve ser maior que 0.
-            }
+            @if (money.errors?.['required']) { Valor é obrigatório. }
+            @if (money.errors?.['min']) { Valor deve ser maior que 0. }
           </span>
         }
       </div>
+
+      <!-- DATA -->
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-gray-400">
+          Data
+        </label>
+
+        <mat-form-field appearance="outline" class="w-full custom-date">
+          <input
+            matInput
+            [matDatepicker]="picker"
+            [formControl]="date"
+            [max]="today"
+            readonly
+            (click)="picker.open()"
+            placeholder="Selecione a data"
+            class="cursor-pointer"
+          />
+
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        @if (date.invalid && submitted) {
+          <span class="text-red-400 text-xs">
+            Data é obrigatória.
+          </span>
+        }
+      </div>
+
     </div>
 
+    <!-- BOTÕES -->
     <div class="flex flex-col gap-3 pt-2">
 
       <button
         type="submit"
-        class="w-full rounded-xl bg-blue-600 hover:bg-blue-700 px-6 py-2 font-medium text-white
+        class="w-full rounded-2xl bg-blue-600 hover:bg-blue-700 
+               px-6 py-3 font-medium text-white
                transition active:scale-95"
         (click)="onSubmit()"
       >
@@ -78,7 +112,8 @@
 
       <button
         type="button"
-        class="w-full rounded-xl bg-gray-700 hover:bg-gray-600 px-6 py-2 font-medium text-white
+        class="w-full rounded-2xl bg-gray-700 hover:bg-gray-600 
+               px-6 py-3 font-medium text-white
                transition active:scale-95"
         (click)="modal.close()"
       >

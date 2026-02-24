@@ -40,10 +40,11 @@ export class LoginComponent {
 
   handleSubmitLogin() {
     if (this.email.invalid || this.password.invalid) {
-      this.snackBar.open('Por favor, preencha todos os campos', 'OK', { 
+      this.snackBar.open('Por favor, preencha todos os campos', undefined, { 
         duration: 3000,
         horizontalPosition: 'center',
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snackbar-error']
       });
       return;
     }
@@ -56,19 +57,21 @@ export class LoginComponent {
       email: this.email.value,
       password: this.password.value
     }, this.remember.value).subscribe({
-      next: () => {
-        this.snackBar.open('Login bem-sucedido!', 'OK', { 
+      next: (response) => {
+        this.snackBar.open(`Login bem-sucedido! Bem vindo ${response.name}`, undefined, { 
           duration: 3000,
           horizontalPosition: 'center',
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snackbar-success']
         });
         this.router.navigate(['home']);
       },
       error: () => {
-        this.snackBar.open('Erro no login', 'OK', { 
+        this.snackBar.open('Erro no login', undefined, { 
           duration: 3000,
           horizontalPosition: 'center',
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snackbar-error']
         });
       }
     });

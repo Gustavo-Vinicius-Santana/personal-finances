@@ -56,7 +56,8 @@ export class FinancialMovementComponent implements OnInit, OnDestroy {
       id: item.id,
       description: item.description,
       amount: item.amount,
-      typeForm: this.movement() ?? 'income'
+      typeForm: this.movement() ?? 'income',
+      date: new Date(item.date)
     });
   }
 }
