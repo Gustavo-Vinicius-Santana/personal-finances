@@ -5,6 +5,8 @@ import { RegisterComponent } from './pages/register/register.component';
 import { RecoverAccountComponent } from './pages/recover-account/recover-account.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { authGuard } from './guard/auth.guard';
+import { ChangeEmailComponent } from './pages/change-email/change-email.component';
+import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 
 export const routes: Routes = [
     {
@@ -27,6 +29,16 @@ export const routes: Routes = [
     {
         path: 'profile',
         component: ProfileComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'change-email',
+        component: ChangeEmailComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'change-password',
+        component: ChangePasswordComponent,
         canActivate: [authGuard]
     }
 ];

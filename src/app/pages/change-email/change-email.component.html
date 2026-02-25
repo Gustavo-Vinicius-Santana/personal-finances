@@ -1,0 +1,95 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-950 px-4">
+
+  <div class="w-full max-w-md mx-auto rounded-2xl border border-gray-800 bg-gray-900/60 p-8 shadow-lg">
+    
+    <div class="flex flex-col gap-6">
+
+      <div class="text-center">
+        <h2 class="text-2xl font-semibold text-white">
+          Alterar Email
+        </h2>
+        <p class="text-sm text-gray-400 mt-1">
+          Digite seu email atual e o novo email
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-gray-300">
+          Email Atual
+        </label>
+        <input
+          readonly
+          type="email"
+          [formControl]="currentEmail"
+          placeholder="seu@email.com"
+          class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white 
+                 placeholder-gray-500 focus:outline-none focus:ring-2 
+                 focus:ring-blue-500 focus:border-transparent transition"
+        />
+        @if (currentEmail.touched && currentEmail.invalid) {
+          <span class="text-xs text-red-400">
+            Email inválido
+          </span>
+        }
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-gray-300">
+          Novo Email
+        </label>
+        <input
+          type="email"
+          [formControl]="newEmail"
+          placeholder="novo@email.com"
+          class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white 
+                 placeholder-gray-500 focus:outline-none focus:ring-2 
+                 focus:ring-blue-500 focus:border-transparent transition"
+        />
+        @if (newEmail.touched && newEmail.invalid) {
+          <span class="text-xs text-red-400">
+            Email inválido
+          </span>
+        }
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-gray-300">
+            Confirmar sua Senha
+        </label>
+        <input
+          type="password"
+          [formControl]="password"
+          placeholder="Digite sua senha para confirmar"
+          class="w-full rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white 
+                 placeholder-gray-500 focus:outline-none focus:ring-2 
+                 focus:ring-blue-500 focus:border-transparent transition"
+        />
+      </div>
+
+      <div class="flex flex-col gap-3 pt-2">
+
+        <button
+          (click)="changeEmail()"
+          type="button"
+          class="w-full rounded-xl bg-blue-600 hover:bg-blue-700 px-6 py-2 font-medium text-white 
+                transition active:scale-95"
+        >
+          Confirmar alteração
+        </button>
+
+        <button
+          type="button"
+          class="w-full rounded-xl bg-gray-800 border border-gray-700 hover:bg-gray-700 
+                px-6 py-2 font-medium text-gray-300 transition"
+          (click)="goBack()"
+        >
+          Voltar
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

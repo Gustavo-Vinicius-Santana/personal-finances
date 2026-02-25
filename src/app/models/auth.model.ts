@@ -20,3 +20,19 @@ export interface UserResponse {
   name: string;
   email: string;
 }
+
+export interface UpdateEmailRequest {
+  currentEmail: string;
+  newEmail: string;
+  password: string;
+}
+
+export interface UpdatePasswordRequest {
+  email: string;
+  code: string;
+  newPassword: string;
+}
+
+export interface UpdateUserRequest {
+  name: string;
+}

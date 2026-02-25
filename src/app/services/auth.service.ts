@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { BehaviorSubject, tap } from 'rxjs';
 import { environment } from '../../enviroments/enviroment.development';
 import {
   LoginRequest,
   RegisterRequest,
   AuthResponse,
-  UserResponse
+  UserResponse,
+  UpdatePasswordRequest,
+  UpdateUserRequest,
+  UpdateEmailRequest
 } from '../models/auth.model';
 
 @Injectable({ providedIn: 'root' })
@@ -15,6 +18,9 @@ export class AuthService {
   private apiUrl = `${environment.apiUrl}/user`;
   private tokenKey = 'auth_token';
   private refreshKey = 'refresh_token';
+
+  private userSubject = new BehaviorSubject<UserResponse | null>(null);
+  user$ = this.userSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -71,11 +77,17 @@ export class AuthService {
   }
 
   getCurrentUser() {
-    return this.http.get<UserResponse>(`${this.apiUrl}/me`);
+    return this.http.get<UserResponse>(`${this.apiUrl}/me`)
+    .pipe(
+      tap(user => this.userSubject.next(user))
+    );
   }
 
-  updateUser(data: any) {
-    return this.http.put<UserResponse>(`${this.apiUrl}/update`, data);
+  updateUser(data: UpdateUserRequest) {
+    return this.http.put<UserResponse>(`${this.apiUrl}/update`, data)
+    .pipe(
+      tap(updatedUser => this.userSubject.next(updatedUser))
+    );
   }
 
   deleteUser() {
@@ -86,7 +98,7 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/forgot-password`, { email });
   }
 
-  resetPassword(data: any) {
+  resetPassword(data: UpdatePasswordRequest) {
     return this.http.post(`${this.apiUrl}/reset-password`, data);
   }
 
@@ -99,5 +111,9 @@ export class AuthService {
         this.saveTokens(response, hasRefresh);
       })
     );
+  }
+
+  changeEmail(data: UpdateEmailRequest) {
+    return this.http.post(`${this.apiUrl}/change-email`, data);
   }
 }

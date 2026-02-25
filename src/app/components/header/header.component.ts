@@ -21,10 +21,14 @@ export class HeaderComponent {
   }
 
   getUserName() {
-    this.authService.getCurrentUser()
-    .subscribe(user => {
-      this.name = user.name;
+    this.authService.user$.subscribe(user => {
+      this.name = user?.name
+        ? this.formatName(user.name)
+        : null;
     });
+
+    this.authService.getCurrentUser()
+      .subscribe();
   }
 
   goToLogin() {
@@ -47,4 +51,19 @@ export class HeaderComponent {
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
+
+  private formatName(fullName: string): string {
+  if (!fullName) return '';
+
+  const parts = fullName.trim().split(' ').filter(p => p.length > 0);
+
+  if (parts.length === 1) {
+    return parts[0]; // só tem primeiro nome
+  }
+
+  const firstName = parts[0];
+  const secondInitial = parts[1].charAt(0).toUpperCase();
+
+  return `${firstName} ${secondInitial}.`;
+}
 }
