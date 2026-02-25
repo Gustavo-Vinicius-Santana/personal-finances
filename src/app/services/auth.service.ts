@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, finalize, tap } from 'rxjs';
-import { environment } from '../../enviroments/enviroment.development';
+import { environment } from '../../environments/environment';
 import {
   LoginRequest,
   RegisterRequest,

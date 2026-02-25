@@ -2,7 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { FinanceItemRequest, FinanceItemResponse } from '../models/finance.model';
 import { inject } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../enviroments/enviroment.development';
+import { environment } from '../../environments/environment';
 import { BehaviorSubject, finalize, tap } from 'rxjs';
 import { LoadingService } from './loading.service';
 
