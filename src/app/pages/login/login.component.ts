@@ -22,6 +22,12 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
 
+  ngOnInit() {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['home']);
+    }
+  }
+
   email = new FormControl('', { 
     nonNullable: true,
     validators: [Validators.required]
@@ -30,13 +36,15 @@ export class LoginComponent {
     nonNullable: true,
     validators: [Validators.required]
   });
+  remember = new FormControl(false, { nonNullable: true });
 
   handleSubmitLogin() {
     if (this.email.invalid || this.password.invalid) {
-      this.snackBar.open('Por favor, preencha todos os campos', 'OK', { 
+      this.snackBar.open('Por favor, preencha todos os campos', undefined, { 
         duration: 3000,
         horizontalPosition: 'center',
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snackbar-error']
       });
       return;
     }
@@ -48,20 +56,22 @@ export class LoginComponent {
     this.authService.login({
       email: this.email.value,
       password: this.password.value
-    }).subscribe({
-      next: () => {
-        this.snackBar.open('Login bem-sucedido!', 'OK', { 
+    }, this.remember.value).subscribe({
+      next: (response) => {
+        this.snackBar.open(`Login bem-sucedido! Bem vindo ${response.name}`, undefined, { 
           duration: 3000,
           horizontalPosition: 'center',
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snackbar-success']
         });
         this.router.navigate(['home']);
       },
       error: () => {
-        this.snackBar.open('Erro no login', 'OK', { 
+        this.snackBar.open('Erro no login', undefined, { 
           duration: 3000,
           horizontalPosition: 'center',
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snackbar-error']
         });
       }
     });

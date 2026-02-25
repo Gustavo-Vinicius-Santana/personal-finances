@@ -98,23 +98,37 @@
     </div>
 
     <!-- BOTÕES -->
-    <div class="flex flex-col gap-3 pt-2">
+    <div class="flex flex-col gap-4 pt-4">
 
-      <button
-        type="submit"
-        class="w-full rounded-2xl bg-blue-600 hover:bg-blue-700 
-               px-6 py-3 font-medium text-white
-               transition active:scale-95"
-        (click)="onSubmit()"
-      >
-        Adicionar
-      </button>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        <button
+          type="submit"
+          class="w-full rounded-2xl bg-blue-600 hover:bg-blue-700 
+                px-6 py-3 font-medium text-white text-center
+                transition active:scale-95"
+          (click)="onSubmit()"
+        >
+          Salvar Alterações
+        </button>
+
+        <button
+          type="button"
+          class="w-full rounded-2xl bg-red-600 hover:bg-red-700 
+                px-6 py-3 font-medium text-white text-center
+                transition active:scale-95"
+          (click)="onDelete()"
+        >
+          Deletar
+        </button>
+
+      </div>
 
       <button
         type="button"
         class="w-full rounded-2xl bg-gray-700 hover:bg-gray-600 
-               px-6 py-3 font-medium text-white
-               transition active:scale-95"
+              px-6 py-3 font-medium text-white text-center
+              transition active:scale-95"
         (click)="modal.close()"
       >
         Cancelar

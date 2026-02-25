@@ -1,0 +1,7 @@
+@if (loading$ | async) {
+    <div class="fixed inset-0 bg-black/40 flex items-center justify-center z-[9999]">
+        <div>
+            <mat-spinner [diameter]="60"></mat-spinner>
+        </div>
+    </div>
+}

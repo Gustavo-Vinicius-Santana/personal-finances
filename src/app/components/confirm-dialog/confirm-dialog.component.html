@@ -1,0 +1,41 @@
+<h2 mat-dialog-title class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+  {{ data.title }}
+</h2>
+
+<mat-dialog-content>
+  <p class="text-gray-600 dark:text-gray-400">
+    {{ data.message }}
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <div class="flex gap-3">
+
+    <button
+      type="button"
+      (click)="cancel()"
+      class="px-4 py-2 rounded-lg border border-gray-300 
+             text-gray-700 
+             hover:bg-gray-100 
+             transition duration-200
+             dark:border-gray-600
+             dark:text-gray-300
+             dark:hover:bg-gray-700">
+      {{ data.cancelText || 'Cancelar' }}
+    </button>
+
+    <button
+      type="button"
+      (click)="confirm()"
+      class="px-4 py-2 rounded-lg 
+             bg-red-600 text-white
+             hover:bg-red-700
+             active:scale-[0.98]
+             transition duration-200 shadow-sm">
+      {{ data.confirmText || 'Confirmar' }}
+    </button>
+
+  </div>
+
+</mat-dialog-actions>

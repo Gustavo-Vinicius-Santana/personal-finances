@@ -63,18 +63,20 @@ export class RegisterComponent {
       password: this.formControls.password.value as string
     }).subscribe({
       next: () => {
-        this.snackBar.open('Registro bem-sucedido!', 'OK', { 
+        this.snackBar.open('Registro bem-sucedido!', undefined, { 
           duration: 3000,
           horizontalPosition: 'center',
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snackbar-success']
         });
         this.router.navigate(['home']);
       },
       error: () => {
-        this.snackBar.open('Erro no registro', 'OK', { 
+        this.snackBar.open('Erro no registro', undefined, { 
           duration: 3000,
           horizontalPosition: 'center',
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snackbar-error']
         });
       }
     });

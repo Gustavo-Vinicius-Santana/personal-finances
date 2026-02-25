@@ -2,8 +2,9 @@ import { Injectable, signal, computed } from '@angular/core';
 import { FinanceItemRequest, FinanceItemResponse } from '../models/finance.model';
 import { inject } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../enviroments/enviroment.development';
-import { BehaviorSubject, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { BehaviorSubject, finalize, tap } from 'rxjs';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,9 +20,23 @@ export class FinanceService {
   private expenseSubject = new BehaviorSubject<FinanceItemResponse[]>([]);
   readonly expense$ = this.expenseSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  readonly total = signal<number>(0);
+
+  private refreshTotal() {
+  this.http
+    .get<{ total: number }>(`${this.apiUrl}/finance-movement/user-finances`)
+    .subscribe(response => {
+      this.total.set(response.total);
+    });
+}
+
+  constructor(
+    private http: HttpClient,
+    private loadingService: LoadingService
+  ) {}
 
   create(data: FinanceItemRequest) {
+    this.loadingService.show();
     return this.http
     .post<FinanceItemResponse>(
       `${this.apiUrl}/finance-movement`,
@@ -34,15 +49,31 @@ export class FinanceService {
         if(newItem.type === 'EXPENSE') {
           this.expenseSubject.next([...this.expenseSubject.value, newItem]);
         }
-      })
+
+        this.refreshTotal();
+      }),
+      finalize(() => this.loadingService.hide())
     );
   }
 
   update(id: string, data: Partial<FinanceItemRequest>) {
+    this.loadingService.show();
     return this.http.put<FinanceItemResponse>(
       `${this.apiUrl}/finance-movement/${id}`,
       data
-    );
+    ).pipe(
+      tap((updatedItem: FinanceItemResponse) => {
+        if(updatedItem.type === 'INCOME') {
+          this.incomeSubject.next(this.incomeSubject.value.map(item => item.id === id ? updatedItem : item));
+        }
+        if(updatedItem.type === 'EXPENSE') {
+          this.expenseSubject.next(this.expenseSubject.value.map(item => item.id === id ? updatedItem : item));
+        }
+        this.refreshTotal();
+      }
+    ),
+    finalize(() => this.loadingService.hide())
+  );
   }
 
   getById(id: string) {
@@ -57,6 +88,7 @@ export class FinanceService {
     ).pipe(
       tap((data: FinanceItemResponse[]) =>{
         if(type === 'INCOME') {
+          this.refreshTotal();
           this.incomeSubject.next(data);
         }
         if(type === 'EXPENSE') {
@@ -67,13 +99,20 @@ export class FinanceService {
   }
 
   remove(item: FinanceItemResponse) {
+    this.loadingService.show();
     return this.http.delete(`${this.apiUrl}/finance-movement/${item.id}`).pipe(
       tap(() => {
         if (item.type === 'INCOME')
           this.incomeSubject.next(this.incomeSubject.value.filter(i => i.id !== item.id));
         if (item.type === 'EXPENSE')
           this.expenseSubject.next(this.expenseSubject.value.filter(i => i.id !== item.id));
-      })
+        this.refreshTotal();
+      }),
+      finalize(() => this.loadingService.hide())
     );
+  }
+
+  getUserFinances() {
+    return this.http.get(`${this.apiUrl}/finance-movement/user-finances`).pipe();
   }
 }

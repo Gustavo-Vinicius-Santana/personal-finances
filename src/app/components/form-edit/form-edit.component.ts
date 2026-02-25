@@ -1,18 +1,18 @@
 import { Component, computed, inject, signal, OnInit } from '@angular/core';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormModalService } from '../../services/form-modal.service';
 import { FinanceService } from '../../services/finance.service';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MAT_DATE_LOCALE, MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-form-add',
+  selector: 'app-form-edit',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -23,32 +23,38 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatIconModule,
     MatSnackBarModule
   ],
-  templateUrl: './form-add.component.html',
-  styleUrl: './form-add.component.scss',
+  templateUrl: './form-edit.component.html',
+  styleUrl: './form-edit.component.scss',
   providers: [
-  provideNativeDateAdapter(),
-  { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }
-],
+    provideNativeDateAdapter(),
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }
+  ],
 })
-export class FormAddComponent implements OnInit {
+export class FormEditComponent implements OnInit {
 
-  private data = inject(MAT_DIALOG_DATA) as { typeForm: 'income' | 'expense' };
   private snackBar = inject(MatSnackBar);
-
-  today = new Date();
+  private data = inject(MAT_DIALOG_DATA) as 
+  { 
+    id: string, 
+    description: string, 
+    amount: number, 
+    typeForm: 'income' | 'expense',
+    date?: Date
+  };
 
   typeForm = signal<string | null>(this.data?.typeForm ?? null);
 
   labelForm = computed(() =>
     this.typeForm() === 'income'
-      ? 'Adicionar Receita'
-      : 'Adicionar Despesa'
+      ? 'Editar Receita'
+      : 'Editar Despesa'
   );
 
   modal = inject(FormModalService);
   finance = inject(FinanceService);
 
   submitted = false;
+  today = new Date();
 
   name = new FormControl('', {
     nonNullable: true,
@@ -67,7 +73,11 @@ export class FormAddComponent implements OnInit {
   formattedMoney = '0,00';
 
   ngOnInit() {
-    this.money.setValue(0);
+    this.name.setValue(this.data.description);
+    this.money.setValue(this.data.amount);
+    this.date.setValue(this.data.date ?? new Date());
+
+    this.updateFormattedValue(this.data.amount);
   }
 
   onMoneyInput(event: Event) {
@@ -77,8 +87,13 @@ export class FormAddComponent implements OnInit {
     const numericValue = Number(onlyNumbers || 0) / 100;
 
     this.money.setValue(numericValue);
+    this.updateFormattedValue(numericValue);
 
-    const formatted = numericValue.toLocaleString('pt-BR', {
+    input.value = this.formattedMoney;
+  }
+
+  private updateFormattedValue(value: number) {
+    const formatted = value.toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });
@@ -87,8 +102,6 @@ export class FormAddComponent implements OnInit {
       this.typeForm() === 'expense'
         ? `- ${formatted}`
         : formatted;
-
-    input.value = this.formattedMoney;
   }
 
   onSubmit() {
@@ -98,30 +111,57 @@ export class FormAddComponent implements OnInit {
       return;
     }
 
-    this.finance.create({
+    this.finance.update(this.data.id, {
       description: this.name.value,
       amount: this.money.value,
       type: this.typeForm()?.toUpperCase() as 'INCOME' | 'EXPENSE',
       date: this.date.value!
-    }).subscribe(({
+    }).subscribe({
       next: () => {
-        this.snackBar.open(`${this.typeForm() === 'income' ? 'Receita' : 'Despesa'} adicionada com sucesso!`, undefined, {
-          duration: 2000,
+        this.snackBar.open('Item atualizado com sucesso!', undefined, { 
+          duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
           panelClass: ['snackbar-success']
         });
+        this.modal.close();
       },
       error: () => {
-        this.snackBar.open(`Erro ao adicionar ${this.typeForm() === 'income' ? 'receita' : 'despesa'}. Tente novamente.`, undefined, {
-          duration: 2000,
+        this.snackBar.open('Erro ao atualizar item. Tente novamente.', undefined, { 
+          duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
           panelClass: ['snackbar-error']
         });
       }
-    }));
+    });
+  }
 
-    this.modal.close();
+  onDelete() {
+    this.finance.remove({
+      id: this.data.id,
+      description: this.name.value,
+      amount: this.money.value,
+      type: this.typeForm()?.toUpperCase() as 'INCOME' | 'EXPENSE',
+      date: this.date.value!
+    }).subscribe({
+      next: () => {
+        this.snackBar.open('Item removido com sucesso!', undefined, { 
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['snackbar-success']
+        });
+        this.modal.close();
+      },
+      error: () => {
+        this.snackBar.open('Erro ao remover item. Tente novamente.', undefined, { 
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['snackbar-error']
+        });
+      }
+    });
   }
 }
