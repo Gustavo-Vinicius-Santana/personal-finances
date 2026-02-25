@@ -13,10 +13,10 @@
                 @else {
                     <p
                     class="mt-1 text-2xl font-bold"
-                    [class.text-green-400]="balance >= 0"
-                    [class.text-red-400]="balance < 0"
+                    [class.text-green-400]="total() >= 0"
+                    [class.text-red-400]="total() < 0"
                     >
-                    {{ balance | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+                    {{ total() | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
                     </p>
                 }
             </div>

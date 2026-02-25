@@ -16,64 +16,14 @@ registerLocaleData(localePt);
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   title = 'personal-finances';
 
   financeService = inject(FinanceService);
   modal = inject(FormModalService);
 
-  incomes: FinanceItemResponse[] = [];
-  expenses: FinanceItemResponse[] = [];
-  balance = 0;
-
-  private subscriptions: Subscription[] = [];
   loading = false;
 
-  ngOnInit() {
-    const subIncome = this.financeService.income$.subscribe(data => {
-      this.incomes = data;
-      this.updateBalance();
-    });
+  total = computed(() => this.financeService.total());
 
-    const subExpense = this.financeService.expense$.subscribe(data => {
-      this.expenses = data;
-      this.updateBalance();
-    });
-
-    this.subscriptions.push(subIncome, subExpense);
-
-    // Carrega dados do backend
-    this.loading = true;
-    this.financeService.getAll('INCOME')
-    .subscribe({
-      next: () => {
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error(error);
-        this.loading = false;
-      }
-    });
-    this.financeService.getAll('EXPENSE')
-    .subscribe({
-      next: () => {
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error(error);
-        this.loading = false;
-      }
-    });
-  }
-
-  private updateBalance() {
-    const totalIncome = this.incomes.reduce((acc, cur) => acc + cur.amount, 0);
-    const totalExpense = this.expenses.reduce((acc, cur) => acc + cur.amount, 0);
-    this.balance = totalIncome - totalExpense;
-  }
-
-  ngOnDestroy() {
-    // Evita memory leaks
-    this.subscriptions.forEach(sub => sub.unsubscribe());
-  }
 }

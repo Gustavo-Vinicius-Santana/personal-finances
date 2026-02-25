@@ -20,6 +20,16 @@ export class FinanceService {
   private expenseSubject = new BehaviorSubject<FinanceItemResponse[]>([]);
   readonly expense$ = this.expenseSubject.asObservable();
 
+  readonly total = signal<number>(0);
+
+  private refreshTotal() {
+  this.http
+    .get<{ total: number }>(`${this.apiUrl}/finance-movement/user-finances`)
+    .subscribe(response => {
+      this.total.set(response.total);
+    });
+}
+
   constructor(
     private http: HttpClient,
     private loadingService: LoadingService
@@ -39,6 +49,8 @@ export class FinanceService {
         if(newItem.type === 'EXPENSE') {
           this.expenseSubject.next([...this.expenseSubject.value, newItem]);
         }
+
+        this.refreshTotal();
       }),
       finalize(() => this.loadingService.hide())
     );
@@ -56,7 +68,9 @@ export class FinanceService {
         }
         if(updatedItem.type === 'EXPENSE') {
           this.expenseSubject.next(this.expenseSubject.value.map(item => item.id === id ? updatedItem : item));
-        }}
+        }
+        this.refreshTotal();
+      }
     ),
     finalize(() => this.loadingService.hide())
   );
@@ -74,6 +88,7 @@ export class FinanceService {
     ).pipe(
       tap((data: FinanceItemResponse[]) =>{
         if(type === 'INCOME') {
+          this.refreshTotal();
           this.incomeSubject.next(data);
         }
         if(type === 'EXPENSE') {
@@ -91,8 +106,13 @@ export class FinanceService {
           this.incomeSubject.next(this.incomeSubject.value.filter(i => i.id !== item.id));
         if (item.type === 'EXPENSE')
           this.expenseSubject.next(this.expenseSubject.value.filter(i => i.id !== item.id));
+        this.refreshTotal();
       }),
       finalize(() => this.loadingService.hide())
     );
+  }
+
+  getUserFinances() {
+    return this.http.get(`${this.apiUrl}/finance-movement/user-finances`).pipe();
   }
 }

@@ -20,7 +20,7 @@ export class AuthService {
   private tokenKey = 'auth_token';
   private refreshKey = 'refresh_token';
 
-  private userSubject = new BehaviorSubject<UserResponse | null | string>(null);
+  private userSubject = new BehaviorSubject<UserResponse | null>(null);
   user$ = this.userSubject.asObservable();
 
   constructor(
