@@ -1,44 +1,79 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { FinanceItem } from '../models/finance.model';
-import { FINANCE_MOCK } from '../data/finance.mock';
+import { FinanceItemRequest, FinanceItemResponse } from '../models/finance.model';
+import { inject } from '@angular/core/testing';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../enviroments/enviroment.development';
+import { BehaviorSubject, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FinanceService {
-  private items = signal<FinanceItem[]>([]);
 
-  constructor() {
-    this.items.set(FINANCE_MOCK);
+  private apiUrl = `${environment.apiUrl}`;
+  readonly items = signal<FinanceItemResponse[]>([]);
+
+  private incomeSubject = new BehaviorSubject<FinanceItemResponse[]>([]);
+  readonly income$ = this.incomeSubject.asObservable();
+
+  private expenseSubject = new BehaviorSubject<FinanceItemResponse[]>([]);
+  readonly expense$ = this.expenseSubject.asObservable();
+
+  constructor(private http: HttpClient) {}
+
+  create(data: FinanceItemRequest) {
+    return this.http
+    .post<FinanceItemResponse>(
+      `${this.apiUrl}/finance-movement`,
+      data
+    ).pipe(
+      tap((newItem: FinanceItemResponse) => { 
+        if(newItem.type === 'INCOME') {
+          this.incomeSubject.next([...this.incomeSubject.value, newItem]);
+        }
+        if(newItem.type === 'EXPENSE') {
+          this.expenseSubject.next([...this.expenseSubject.value, newItem]);
+        }
+      })
+    );
   }
 
-  readonly all = this.items.asReadonly();
-
-  readonly incomes = computed(() =>
-    this.items().filter(item => item.type === 'income')
-  );
-
-  readonly expenses = computed(() =>
-    this.items().filter(item => item.type === 'expense')
-  );
-
-  readonly totalIncome = computed(() =>
-    this.incomes().reduce((acc, cur) => acc + cur.amount, 0)
-  );
-
-  readonly totalExpense = computed(() =>
-    this.expenses().reduce((acc, cur) => acc + cur.amount, 0)
-  );
-
-  readonly balance = computed(() =>
-    this.totalIncome() - this.totalExpense()
-  );
-
-  add(item: FinanceItem) {
-    this.items.update(list => [...list, item]);
+  update(id: string, data: Partial<FinanceItemRequest>) {
+    return this.http.put<FinanceItemResponse>(
+      `${this.apiUrl}/finance-movement/${id}`,
+      data
+    );
   }
 
-  remove(id: string) {
-    this.items.update(list => list.filter(item => item.id !== id));
+  getById(id: string) {
+    return this.http.get<FinanceItemResponse>(
+      `${this.apiUrl}/finance-movement/${id}`
+    );
+  }
+
+  getAll(type?: 'INCOME' | 'EXPENSE' | '') {
+    return this.http.get<FinanceItemResponse[]>(
+      `${this.apiUrl}/finance-movement?type=${type}`
+    ).pipe(
+      tap((data: FinanceItemResponse[]) =>{
+        if(type === 'INCOME') {
+          this.incomeSubject.next(data);
+        }
+        if(type === 'EXPENSE') {
+          this.expenseSubject.next(data);
+        }
+      })
+    );
+  }
+
+  remove(item: FinanceItemResponse) {
+    return this.http.delete(`${this.apiUrl}/finance-movement/${item.id}`).pipe(
+      tap(() => {
+        if (item.type === 'INCOME')
+          this.incomeSubject.next(this.incomeSubject.value.filter(i => i.id !== item.id));
+        if (item.type === 'EXPENSE')
+          this.expenseSubject.next(this.expenseSubject.value.filter(i => i.id !== item.id));
+      })
+    );
   }
 }

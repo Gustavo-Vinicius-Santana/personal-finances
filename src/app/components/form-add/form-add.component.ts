@@ -41,22 +41,18 @@ export class FormAddComponent {
     // Remove tudo que não for número
     const onlyNumbers = input.value.replace(/\D/g, '');
 
-    // Atualiza o valor visível imediatamente
     input.value = onlyNumbers;
 
-    // Converte para número real (centavos)
     const numericValue = Number(onlyNumbers) / 100;
 
-    // Atualiza o FormControl
     this.money.setValue(numericValue);
 
-    // Atualiza o valor formatado
     this.formattedMoney = numericValue.toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });
 
-    // Atualiza o input com a máscara final
+
     input.value = this.formattedMoney;
   }
 
@@ -68,13 +64,12 @@ export class FormAddComponent {
       return;
     }
 
-    this.finance.add({
-      id: crypto.randomUUID(),
-      description: this.name.value,
+    this.finance.create({
+      description: this.name.value ,
       amount: this.money.value,
-      date: new Date(),
-      type: this.typeForm() === 'income' ? 'income' : 'expense'
-    });
+      type: this.typeForm()?.toUpperCase() as 'INCOME' | 'EXPENSE',
+      date: new Date()
+    }).subscribe();
 
     this.modal.close();
   }

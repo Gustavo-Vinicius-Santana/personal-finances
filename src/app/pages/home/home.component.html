@@ -7,10 +7,10 @@
                 <p class="text-sm text-gray-400">Saldo atual</p>
                 <p
                 class="mt-1 text-2xl font-bold"
-                [class.text-green-400]="finance.balance() >= 0"
-                [class.text-red-400]="finance.balance() < 0"
+                [class.text-green-400]="balance >= 0"
+                [class.text-red-400]="balance < 0"
                 >
-                {{ finance.balance() | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+                {{ balance | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
                 </p>
             </div>
         </section>

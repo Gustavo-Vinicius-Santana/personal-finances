@@ -2,9 +2,8 @@
 
   <div class="w-full max-w-md mx-auto rounded-2xl border border-gray-800 bg-gray-900/60 p-8 shadow-lg">
     
-    <form class="flex flex-col gap-6">
+    <form [formGroup]="form" (ngSubmit)="register()" class="flex flex-col gap-6">
 
-      <!-- Título -->
       <div class="text-center">
         <h2 class="text-2xl font-semibold text-white">
           Criar Conta
@@ -14,63 +13,104 @@
         </p>
       </div>
 
-      <!-- Nome -->
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-gray-300">
           Nome
         </label>
         <input
+          formControlName="name"
           type="text"
           placeholder="Seu nome completo"
           class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white 
                  placeholder-gray-500 focus:outline-none focus:ring-2 
                  focus:ring-blue-500 focus:border-transparent transition"
         />
+        @if (submitted && formControls.name.errors?.['required']) {
+          <small class="text-red-500 text-xs font-medium">
+            Nome é obrigatório
+          </small>
+        }
+
+        @if (submitted && formControls.name.errors?.['minlength']) {
+          <small class="text-red-500 text-xs font-medium">
+            Mínimo 3 caracteres
+          </small>
+        }
       </div>
 
-      <!-- Email -->
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-gray-300">
           Email
         </label>
         <input
+          formControlName="email"
           type="email"
           placeholder="seu@email.com"
           class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white 
                  placeholder-gray-500 focus:outline-none focus:ring-2 
                  focus:ring-blue-500 focus:border-transparent transition"
         />
+        @if (submitted && formControls.email.errors?.['required']) {
+          <small class="text-red-500 text-xs font-medium">
+            Email é obrigatório
+          </small>
+        }
+
+        @if (submitted && formControls.email.errors?.['email']) {
+          <small class="text-red-500 text-xs font-medium">
+            Email inválido
+          </small>
+        }
       </div>
 
-      <!-- Senha -->
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-gray-300">
           Senha
         </label>
         <input
+          formControlName="password"
           type="password"
           placeholder="********"
           class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white 
                  placeholder-gray-500 focus:outline-none focus:ring-2 
                  focus:ring-blue-500 focus:border-transparent transition"
         />
+        @if (submitted && formControls.password.errors?.['required']) {
+          <small class="text-red-500 text-xs font-medium">
+            Senha é obrigatória
+          </small>
+        }
+
+        @if (submitted && (
+            formControls.password.errors?.['pattern'] ||
+            formControls.password.errors?.['minlength']
+        )) {
+          <small class="text-red-500 text-xs font-medium">
+            Mínimo 6 caracteres, letra maiúscula, minúscula e número
+          </small>
+        }
+
       </div>
 
-      <!-- Confirmar Senha -->
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium text-gray-300">
           Confirmar Senha
         </label>
         <input
+          formControlName="confirmPassword"
           type="password"
           placeholder="********"
           class="rounded-xl bg-gray-800 border border-gray-700 px-4 py-2 text-white 
                  placeholder-gray-500 focus:outline-none focus:ring-2 
                  focus:ring-blue-500 focus:border-transparent transition"
         />
+        @if (form.errors?.['passwordMismatch']) {
+          <small class="text-red-500 text-xs font-medium">
+            Senhas não coincidem
+          </small>
+        }
       </div>
 
-      <!-- Botão -->
       <button
         type="submit"
         class="w-full rounded-xl bg-blue-600 hover:bg-blue-700 px-6 py-2 font-medium text-white 
@@ -79,7 +119,6 @@
         Criar Conta
       </button>
 
-      <!-- Link para Login -->
       <p class="text-sm text-center text-gray-400">
         Já possui conta?
         <a [routerLink]="['']"  class="text-blue-400 hover:text-blue-500 transition font-medium">
