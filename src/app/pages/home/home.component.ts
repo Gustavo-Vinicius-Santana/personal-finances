@@ -6,12 +6,13 @@ import { CurrencyPipe, registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { FinanceItemResponse } from '../../models/finance.model';
 import { Subscription } from 'rxjs';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 registerLocaleData(localePt);
 
 @Component({
   selector: 'app-home',
-  imports: [FinancialMovementComponent, CurrencyPipe],
+  imports: [FinancialMovementComponent, CurrencyPipe, MatProgressSpinnerModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -26,6 +27,7 @@ export class HomeComponent implements OnInit {
   balance = 0;
 
   private subscriptions: Subscription[] = [];
+  loading = false;
 
   ngOnInit() {
     const subIncome = this.financeService.income$.subscribe(data => {
@@ -41,8 +43,27 @@ export class HomeComponent implements OnInit {
     this.subscriptions.push(subIncome, subExpense);
 
     // Carrega dados do backend
-    this.financeService.getAll('INCOME').subscribe();
-    this.financeService.getAll('EXPENSE').subscribe();
+    this.loading = true;
+    this.financeService.getAll('INCOME')
+    .subscribe({
+      next: () => {
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error(error);
+        this.loading = false;
+      }
+    });
+    this.financeService.getAll('EXPENSE')
+    .subscribe({
+      next: () => {
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error(error);
+        this.loading = false;
+      }
+    });
   }
 
   private updateBalance() {

@@ -5,13 +5,20 @@
                 class="rounded-lg border border-gray-800 bg-gray-900/40 px-6 py-4 text-center"
             >
                 <p class="text-sm text-gray-400">Saldo atual</p>
-                <p
-                class="mt-1 text-2xl font-bold"
-                [class.text-green-400]="balance >= 0"
-                [class.text-red-400]="balance < 0"
-                >
-                {{ balance | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
-                </p>
+                @if (loading == true) {
+                    <div class="flex justify-center">
+                        <mat-spinner [diameter]="50"></mat-spinner>
+                    </div>        
+                } 
+                @else {
+                    <p
+                    class="mt-1 text-2xl font-bold"
+                    [class.text-green-400]="balance >= 0"
+                    [class.text-red-400]="balance < 0"
+                    >
+                    {{ balance | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+                    </p>
+                }
             </div>
         </section>
 

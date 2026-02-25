@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, finalize, tap } from 'rxjs';
 import { environment } from '../../enviroments/enviroment.development';
 import {
   LoginRequest,
@@ -11,6 +11,7 @@ import {
   UpdateUserRequest,
   UpdateEmailRequest
 } from '../models/auth.model';
+import { LoadingService } from './loading.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -22,7 +23,10 @@ export class AuthService {
   private userSubject = new BehaviorSubject<UserResponse | null>(null);
   user$ = this.userSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private loadingService: LoadingService
+  ) {}
 
   // =====================
   // TOKEN STORAGE
@@ -64,16 +68,27 @@ export class AuthService {
   // =====================
 
   login(data: LoginRequest, remember: boolean) {
-    console.log('Login data:', data);
+
+    this.loadingService.show();
+
     return this.http
       .post<AuthResponse>(`${this.apiUrl}/login`, data)
-      .pipe(tap(response => this.saveTokens(response, remember)));
+      .pipe(
+        tap(response => this.saveTokens(response, remember)),
+        finalize(() => this.loadingService.hide())
+      );
   }
 
   register(data: RegisterRequest) {
+
+    this.loadingService.show();
+
     return this.http
       .post<AuthResponse>(`${this.apiUrl}/register`, data)
-      .pipe(tap(response => this.saveTokens(response, false)));
+      .pipe(
+        tap(response => this.saveTokens(response, false)),
+        finalize(() => this.loadingService.hide())
+      );
   }
 
   getCurrentUser() {
@@ -84,14 +99,26 @@ export class AuthService {
   }
 
   updateUser(data: UpdateUserRequest) {
-    return this.http.put<UserResponse>(`${this.apiUrl}/update`, data)
-    .pipe(
-      tap(updatedUser => this.userSubject.next(updatedUser))
-    );
+
+    this.loadingService.show();
+
+    return this.http
+      .put<UserResponse>(`${this.apiUrl}/update`, data)
+      .pipe(
+        tap(updatedUser => this.userSubject.next(updatedUser)),
+        finalize(() => this.loadingService.hide())
+      );
   }
 
   deleteUser() {
-    return this.http.delete(`${this.apiUrl}/delete`);
+
+    this.loadingService.show();
+
+    return this.http
+      .delete(`${this.apiUrl}/delete`)
+      .pipe(
+        finalize(() => this.loadingService.hide())
+      );
   }
 
   forgotPassword(email: string) {

@@ -3,11 +3,12 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-header',
   standalone: true, 
-  imports: [MatIconModule, MatMenuModule],
+  imports: [MatIconModule, MatMenuModule, MatProgressSpinnerModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -15,16 +16,19 @@ export class HeaderComponent {
   private router = inject(Router);
   private authService = inject(AuthService);
   name: string | null = null;
+  loading = false;
 
   ngOnInit() {
     this.getUserName();
   }
 
   getUserName() {
+    this.loading = true;
     this.authService.user$.subscribe(user => {
       this.name = user?.name
         ? this.formatName(user.name)
         : null;
+      this.loading = false;
     });
 
     this.authService.getCurrentUser()

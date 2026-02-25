@@ -9,30 +9,36 @@
 
       @if (isLoggedIn()) {
 
-        <h1>bem-vindo {{ name }}</h1>
-        <button 
-          class="cursor-pointer"
-          [matMenuTriggerFor]="menu"
-        >
-          <mat-icon
-            style="font-size: 37px; width: auto; height: auto; padding: 0%; margin: 0%;"
-            fontIcon="account_circle" 
-          />
-        </button>
-        
-        <mat-menu 
-          #menu="matMenu" 
-        >
-          <button mat-menu-item (click)="goToProfile()">
-            <mat-icon fontIcon="person" />
-            <span>Perfil</span>
+        @if (loading == false) {
+          <h1>bem-vindo {{ name }}</h1>
+          <button 
+            class="cursor-pointer"
+            [matMenuTriggerFor]="menu"
+          >
+            <mat-icon
+              style="font-size: 37px; width: auto; height: auto; padding: 0%; margin: 0%;"
+              fontIcon="account_circle" 
+            />
           </button>
+          
+          <mat-menu 
+            #menu="matMenu" 
+          >
+            <button mat-menu-item (click)="goToProfile()">
+              <mat-icon fontIcon="person" />
+              <span>Perfil</span>
+            </button>
 
-          <button mat-menu-item (click)="logout()">
-            <mat-icon fontIcon="logout" />
-            <span>Sair</span>
-          </button>
-        </mat-menu>
+            <button mat-menu-item (click)="logout()">
+              <mat-icon fontIcon="logout" />
+              <span>Sair</span>
+            </button>
+          </mat-menu>
+        } @else {
+          <div class="flex justify-center">
+            <mat-spinner [diameter]="40"></mat-spinner>
+          </div>   
+        }
 
       } @else {
 
