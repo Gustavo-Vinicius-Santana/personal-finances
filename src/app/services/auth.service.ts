@@ -20,7 +20,7 @@ export class AuthService {
   private tokenKey = 'auth_token';
   private refreshKey = 'refresh_token';
 
-  private userSubject = new BehaviorSubject<UserResponse | null>(null);
+  private userSubject = new BehaviorSubject<UserResponse | null | string>(null);
   user$ = this.userSubject.asObservable();
 
   constructor(
@@ -74,7 +74,10 @@ export class AuthService {
     return this.http
       .post<AuthResponse>(`${this.apiUrl}/login`, data)
       .pipe(
-        tap(response => this.saveTokens(response, remember)),
+        tap(response => {
+          this.saveTokens(response, remember)
+          this.userSubject.next({name: response.name, email: '', id: 0});
+        }),
         finalize(() => this.loadingService.hide())
       );
   }
@@ -86,7 +89,10 @@ export class AuthService {
     return this.http
       .post<AuthResponse>(`${this.apiUrl}/register`, data)
       .pipe(
-        tap(response => this.saveTokens(response, false)),
+        tap(response =>{ 
+          this.saveTokens(response, false)
+          this.userSubject.next({name: response.name, email: '', id: 0});
+        }),
         finalize(() => this.loadingService.hide())
       );
   }
