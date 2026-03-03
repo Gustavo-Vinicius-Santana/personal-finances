@@ -1,59 +1,62 @@
-# PersonalFinances
+# 💻 Personal Finance Manager - Front-end
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.19.
+Interface web desenvolvida em **Angular** para gerenciamento de finanças pessoais, permitindo o controle de entradas e saídas de dinheiro com cálculo automático do saldo total.
 
-## Development server
+A aplicação consome uma API REST para persistência de dados e autenticação de usuários, oferecendo uma experiência dinâmica e responsiva no modelo SPA (Single Page Application).
 
-To start a local development server, run:
+---
+
+## 🚀 Tecnologias Utilizadas
+
+- Angular
+- TypeScript
+- Angular Router
+- Angular HttpClient
+- Reactive Forms
+- Guards de rota
+- CSS / SCSS
+- Angular material
+- Tailwind
+
+---
+
+## 📌 Funcionalidades
+
+- ✅ Tela de cadastro de usuário  
+- ✅ Tela de login com autenticação  
+- ✅ Registro de receitas (entradas)  
+- ✅ Registro de despesas (saídas)  
+- ✅ Listagem de movimentações financeiras  
+- ✅ Cálculo automático do saldo total  
+- ✅ Proteção de rotas privadas  
+- ✅ Logout do usuário  
+
+---
+
+## 🏗️ Estrutura da Aplicação
+
+O projeto segue a arquitetura padrão do Angular, organizada por:
+
+- **Components** → Telas e componentes reutilizáveis  
+- **Services** → Comunicação com a API REST  
+- **Guards** → Proteção de rotas autenticadas  
+- **Models/Interfaces** → Tipagem das entidades  
+- **Modules** → Organização estrutural da aplicação  
+
+A comunicação com o back-end é realizada através do `HttpClient`, utilizando interceptors para envio automático do token de autenticação nas requisições protegidas.
+
+---
+
+
+## ⚙️ Como Executar
 
 ```bash
+# Instalar dependências
+npm install
+
+# Executar aplicação
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+aplicação disponivel na porta
+http://localhost:4200
